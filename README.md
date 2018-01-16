@@ -1,7 +1,19 @@
 # go-standard
-A N-Tier architecture of go project to be used as a template for next development in go.
+A clean architecture of go project to be used as a template for next development in go.
 
+# Prerequisite
+1. Install golang
+2. Install dep from github.com/golang/dep
 
+# How to use this project to create a new project
+1. `go get -u github.com/mokapos/go-standard`
+2. `cd $GOPATH/src/github.com/mokapos/go-standard`
+3. `rm -rf .git`
+4. Use this project to init your new project to git.
+5. Delete this project folder in your local machine.
+6. DO NOT USE `git clone`, use `go get -u github.com/{your git account}/{your new project}` instead!
+7. `cd $GOPATH/src/github.com/{your git account}/{your new project}`
+8. Enjoy!
 
 ### References
 
@@ -35,6 +47,12 @@ A N-Tier architecture of go project to be used as a template for next developmen
 8. Development Environment
 
 
+### 1. Naming Convention
+
+  For naming convention, golint (https://github.com/golang/lint) will provide the analysis.
+  Then, the code must be cleaned by gofmt and goimports.
+  Last, make sure the source code is already analyzed by govet before committing.
+
 
 ### 2. Comment
 
@@ -67,4 +85,6 @@ type GroupRepository interface { ... }
 // Lower will set text value to lowercase - will return error when conversion failed.
 func Lower(text string) (string, error) { ... }
 ```
+
+
 
