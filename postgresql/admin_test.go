@@ -8,21 +8,48 @@ import (
 	"github.com/mokapos/go-standard/testingutil"
 )
 
-func TestFindAllEmails(t *testing.T) {
-	t.Parallel()
-	db, destroy := postgresql.CreateTestDB(t)
-	// TODO: still can't drop database automatically, need to do research about this
-	defer destroy()
-
-	postgresql.SetSchema(t, db, "admin")
+func TestFindByID(t *testing.T) {
+	db := postgresql.NewTestDBConnection(t)
+	defer db.Close()
+	postgresql.RunSQLFile(t, db, "admin")
 	repo := postgresql.NewAdminRepository(db, db)
 
-	// Test for query and execution errors
-	emails, err := repo.FindAllEmail()
+	// An error must not be returned on a present ID
+	_, err := repo.FindByID(1)
 	testingutil.Ok(t, err)
 
-	// Test for return value errors
+	// An error must be returned on invalid ID
+	_, err = repo.FindByID(100)
+	testingutil.Error(t, err, "sql: no rows in result set")
+}
+
+func TestFindByNameAndPassword(t *testing.T) {
+	db := postgresql.NewTestDBConnection(t)
+	defer db.Close()
+	postgresql.RunSQLFile(t, db, "admin")
+	repo := postgresql.NewAdminRepository(db, db)
+
+	// An instance of admin must be returned on correct name and password combination
+	admin, err := repo.FindByNameAndPassword("Alata", "GoseiRed")
+	testingutil.Ok(t, err)
+	testingutil.Equals(t, "Alata", admin.Name)
+	testingutil.Equals(t, "GoseiRed", admin.Password)
+	testingutil.Equals(t, "red@goseiger.com", admin.Email)
+
+	// An error must be encountered on wrong name and password combination
+	admin, err = repo.FindByNameAndPassword("Alata", "GoseiSilver")
+	testingutil.Error(t, err, "sql: no rows in result set")
+}
+
+func TestFindAllEmails(t *testing.T) {
+	db := postgresql.NewTestDBConnection(t)
+	defer db.Close()
+	postgresql.RunSQLFile(t, db, "admin")
+	repo := postgresql.NewAdminRepository(db, db)
+
 	// All emails must appeared exactly once
+	emails, err := repo.FindAllEmail()
+	testingutil.Ok(t, err)
 	sort.Strings(emails)
 	testingutil.Equals(t, "black@goseiger.com", emails[0])
 	testingutil.Equals(t, "blue@goseiger.com", emails[1])

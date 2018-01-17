@@ -20,22 +20,22 @@ func NewAdminRepository(master *DB, slave *DB) *AdminRepository {
 
 // FindByID searches for any admin with specified id in the database
 func (repo *AdminRepository) FindByID(id uint64) (*standard.Admin, error) {
-	var admin *standard.Admin
-	err := repo.Slave.Get(admin, "SELECT * FROM admins WHERE id=$1", id)
+	var admin standard.Admin
+	err := repo.Slave.Get(&admin, "SELECT * FROM admins WHERE id=$1", id)
 	if err != nil {
 		return nil, err
 	}
-	return admin, nil
+	return &admin, nil
 }
 
 // FindByNameAndPassword searches for any admin with specified name and password
 func (repo *AdminRepository) FindByNameAndPassword(name string, password string) (*standard.Admin, error) {
-	var admin *standard.Admin
-	err := repo.Slave.Get(admin, "SELECT * FROM admins WHERE name=$1 AND password=$2", name, password)
+	var admin standard.Admin
+	err := repo.Slave.Get(&admin, "SELECT * FROM admins WHERE name=$1 AND password=$2", name, password)
 	if err != nil {
 		return nil, err
 	}
-	return admin, nil
+	return &admin, nil
 }
 
 // FindAllEmail returns all admin emails

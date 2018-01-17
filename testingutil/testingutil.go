@@ -26,11 +26,20 @@ func Ok(tb testing.TB, err error) {
 	}
 }
 
+// Error fails the test if no errors is present
+func Error(tb testing.TB, expected error, actual string) {
+	if expected == nil || expected.Error() != actual {
+		_, file, line, _ := runtime.Caller(1)
+		fmt.Printf("\033[31m%s:%d: expected error %s\n\tgot: %s\033[39m\n", filepath.Base(file), line, expected.Error(), actual)
+		tb.Fail()
+	}
+}
+
 // Equals fails the test if the 'expected' value is not equal to 'actual' value
 func Equals(tb testing.TB, expected interface{}, actual interface{}) {
 	if !reflect.DeepEqual(expected, actual) {
 		_, file, line, _ := runtime.Caller(1)
-		fmt.Printf("\033[31m%s:%d:\n\texp: %#v\n\tgot: %#v\033[39m\n", filepath.Base(file), line, expected, actual)
+		fmt.Printf("\033[31m%s:%d:\n\texpected: %#v\n\tgot: %#v\033[39m\n", filepath.Base(file), line, expected, actual)
 		tb.Fail()
 	}
 }

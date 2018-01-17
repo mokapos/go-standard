@@ -13,6 +13,8 @@ WITH (
     OIDS=FALSE
 );
 
+TRUNCATE TABLE public.admins RESTART IDENTITY CASCADE;
+
 INSERT INTO public.admins(name, password, email) VALUES ('Alata', 'GoseiRed', 'red@goseiger.com');
 INSERT INTO public.admins(name, password, email) VALUES ('Eri', 'GoseiPink', 'pink@goseiger.com');
 INSERT INTO public.admins(name, password, email) VALUES ('Agri', 'GoseiBlack', 'black@goseiger.com');
