@@ -37,6 +37,7 @@ func (itrc *AdminInteractor) TryLogin(name string, password string) (uint64, err
 	if err != nil {
 		return 0, err
 	}
+	// Need more research on whether this error is already specified (as not found) in the previous error or not
 	if admin == nil {
 		return 0, errors.New("either name or password or both are wrong")
 	}

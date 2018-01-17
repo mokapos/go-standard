@@ -41,10 +41,10 @@ func New(options *Options, logger *log.Logger) (*DB, error) {
 // Query runs a specified query string with the specified arguments, then returns the query results
 func (db *DB) Query(query string, args ...interface{}) (*sqlx.Rows, error) {
 	start := time.Now()
-	rows, err := db.Queryx(query, args)
+	rows, err := db.DB.Queryx(query, args...)
 	duration := time.Since(start)
 	if db.logger != nil {
-		logSQL(db.logger, duration, query, args)
+		logSQL(db.logger, duration, query, args...)
 	}
 	if err != nil && db.logger != nil {
 		logError(db.logger, err)
@@ -54,16 +54,16 @@ func (db *DB) Query(query string, args ...interface{}) (*sqlx.Rows, error) {
 
 // Queryx is the same with Query
 func (db *DB) Queryx(query string, args ...interface{}) (*sqlx.Rows, error) {
-	return db.Query(query, args)
+	return db.Query(query, args...)
 }
 
 // Get runs a 'SELECT' query and immediately save the single query result in the destination
 func (db *DB) Get(destination interface{}, query string, args ...interface{}) error {
 	start := time.Now()
-	err := db.Get(destination, query, args)
+	err := db.DB.Get(destination, query, args...)
 	duration := time.Since(start)
 	if db.logger != nil {
-		logSQL(db.logger, duration, query, args)
+		logSQL(db.logger, duration, query, args...)
 	}
 	if err != nil && db.logger != nil {
 		logError(db.logger, err)
@@ -74,10 +74,10 @@ func (db *DB) Get(destination interface{}, query string, args ...interface{}) er
 // Select runs a 'SELECT' query and immediately save the query results in the destination
 func (db *DB) Select(destination interface{}, query string, args ...interface{}) error {
 	start := time.Now()
-	err := db.Select(destination, query, args)
+	err := db.DB.Select(destination, query, args...)
 	duration := time.Since(start)
 	if db.logger != nil {
-		logSQL(db.logger, duration, query, args)
+		logSQL(db.logger, duration, query, args...)
 	}
 	if err != nil && db.logger != nil {
 		logError(db.logger, err)
