@@ -8,7 +8,7 @@ import (
 	"github.com/mokapos/go-standard/testingutil"
 )
 
-func TestFindByID(t *testing.T) {
+func TestAdminFindByID(t *testing.T) {
 	db := postgresql.NewTestDBConnection(t)
 	defer db.Close()
 	postgresql.RunSQLFile(t, db, "admin")
@@ -23,7 +23,7 @@ func TestFindByID(t *testing.T) {
 	testingutil.Error(t, err, "sql: no rows in result set")
 }
 
-func TestFindByNameAndPassword(t *testing.T) {
+func TestAdminFindByNameAndPassword(t *testing.T) {
 	db := postgresql.NewTestDBConnection(t)
 	defer db.Close()
 	postgresql.RunSQLFile(t, db, "admin")
@@ -41,7 +41,7 @@ func TestFindByNameAndPassword(t *testing.T) {
 	testingutil.Error(t, err, "sql: no rows in result set")
 }
 
-func TestFindAllEmails(t *testing.T) {
+func TestAdminFindAllEmails(t *testing.T) {
 	db := postgresql.NewTestDBConnection(t)
 	defer db.Close()
 	postgresql.RunSQLFile(t, db, "admin")

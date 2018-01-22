@@ -17,7 +17,7 @@ const (
 	dbName     = "library_test"
 )
 
-// NewTestDBConnection creates a connection to testing database
+// NewTestDBConnection creates a connection to testing database.
 func NewTestDBConnection(t *testing.T) *DB {
 	db, err := New(&Options{
 		Host:     dbHost,
@@ -35,7 +35,7 @@ func NewTestDBConnection(t *testing.T) *DB {
 	return db
 }
 
-// RunSQLFile runs a SQL file inside testdata folder
+// RunSQLFile runs a SQL file inside testdata folder.
 func RunSQLFile(t *testing.T, db *DB, name string) {
 	content, err := ioutil.ReadFile(fmt.Sprintf("./testdata/%s.sql", name))
 	testingutil.Ok(t, err)

@@ -10,13 +10,13 @@ import (
 	_ "github.com/lib/pq" // postgreSQL driver for default package 'database/sql' or the derivatives
 )
 
-// DB connection struct, extending sqlx library to be able to log some query executions
+// DB connection struct, extending sqlx library to be able to log some query executions.
 type DB struct {
 	*sqlx.DB
 	logger *log.Logger
 }
 
-// Options needed when creating a new database connection
+// Options needed when creating a new database connection.
 type Options struct {
 	Host     string
 	Port     string
@@ -26,7 +26,7 @@ type Options struct {
 	SSLMode  string
 }
 
-// New database connection, logger can be nil if no log is wanted
+// New database connection, logger can be nil if no log is wanted.
 func New(options *Options, logger *log.Logger) (*DB, error) {
 	connString := fmt.Sprintf("dbname='%s' user='%s' password='%s' host='%s' port='%s' sslmode='%s'",
 		options.Name, options.UserName, options.Password, options.Host, options.Port, options.SSLMode)
@@ -38,7 +38,7 @@ func New(options *Options, logger *log.Logger) (*DB, error) {
 	return &DB{DB: db, logger: logger}, nil
 }
 
-// Query runs a specified query string with the specified arguments, then returns the query results
+// Query runs a specified query string with the specified arguments, then returns the query results.
 func (db *DB) Query(query string, args ...interface{}) (*sqlx.Rows, error) {
 	start := time.Now()
 	rows, err := db.DB.Queryx(query, args...)
@@ -52,12 +52,12 @@ func (db *DB) Query(query string, args ...interface{}) (*sqlx.Rows, error) {
 	return rows, err
 }
 
-// Queryx is the same with Query
+// Queryx is the same with Query.
 func (db *DB) Queryx(query string, args ...interface{}) (*sqlx.Rows, error) {
 	return db.Query(query, args...)
 }
 
-// Get runs a 'SELECT' query and immediately save the single query result in the destination
+// Get runs a 'SELECT' query and immediately save the single query result in the destination.
 func (db *DB) Get(destination interface{}, query string, args ...interface{}) error {
 	start := time.Now()
 	err := db.DB.Get(destination, query, args...)
@@ -71,7 +71,7 @@ func (db *DB) Get(destination interface{}, query string, args ...interface{}) er
 	return err
 }
 
-// Select runs a 'SELECT' query and immediately save the query results in the destination
+// Select runs a 'SELECT' query and immediately save the query results in the destination.
 func (db *DB) Select(destination interface{}, query string, args ...interface{}) error {
 	start := time.Now()
 	err := db.DB.Select(destination, query, args...)

@@ -1,8 +1,8 @@
-package standard
+package root
 
 import "time"
 
-// Book is an entity of a book inside a library
+// Book is an entity of a book inside a library.
 type Book struct {
 	ID          uint64    `db:"id"`
 	Title       string    `db:"title"`
@@ -11,12 +11,12 @@ type Book struct {
 	Timestampable
 }
 
-// BookInteractor is a collection of method that can be done to Book object
+// BookInteractor is a collection of method that can be done to Book object.
 type BookInteractor struct {
-	repo BookRepository
+	bookRepo BookRepository
 }
 
-// BookRepository is a collection of method that can call Book table in the database
+// BookRepository is a collection of method that can call Book table in the database.
 type BookRepository interface {
 	FindAll() ([]*Book, error)
 	FindByTitle(title string) ([]*Book, error)
@@ -24,14 +24,14 @@ type BookRepository interface {
 	Delete(id uint64) error
 }
 
-// NewBookInteractor returns an instance of BookInteractor
-func NewBookInteractor(repository BookRepository) *BookInteractor {
-	return &BookInteractor{repo: repository}
+// NewBookInteractor returns an instance of BookInteractor.
+func NewBookInteractor(bookRepo BookRepository) *BookInteractor {
+	return &BookInteractor{bookRepo: bookRepo}
 }
 
-// GroupByPublishedYear returns a report of how many book published at each year between 'start' and 'end' inclusive
+// GroupByPublishedYear returns a report of how many book published at each year between 'start' and 'end' inclusive.
 func (itrc *BookInteractor) GroupByPublishedYear(start uint16, end uint16) ([]*PublishedYearReport, error) {
-	allBooks, err := itrc.repo.FindAll()
+	allBooks, err := itrc.bookRepo.FindAll()
 	if err != nil {
 		return nil, err
 	}
@@ -49,17 +49,17 @@ func (itrc *BookInteractor) GroupByPublishedYear(start uint16, end uint16) ([]*P
 	return result, nil
 }
 
-// FindByTitle returns any book whose title match the given string
+// FindByTitle returns any book whose title match the given string.
 func (itrc *BookInteractor) FindByTitle(title string) ([]*Book, error) {
-	return itrc.repo.FindByTitle(title)
+	return itrc.bookRepo.FindByTitle(title)
 }
 
-// Create function inserts a new book entity to the database
+// Create function inserts a new book entity to the database.
 func (itrc *BookInteractor) Create(book *Book) error {
-	return itrc.repo.Create(book)
+	return itrc.bookRepo.Create(book)
 }
 
-// Delete function soft deletes a book with corresponding id
+// Delete function soft deletes a book with corresponding id.
 func (itrc *BookInteractor) Delete(id uint64) error {
-	return itrc.repo.Delete(id)
+	return itrc.bookRepo.Delete(id)
 }
